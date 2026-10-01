@@ -1,6 +1,0 @@
-{
-  "name": "新種創世宣言 徹底批評・哲学対話ラボ (Manifesto for a New Species)",
-  "description": "GillisALeasweatによる『新種創世宣言』の原文読解、多角的な哲学的・科学的批評、超人間主義と思想実験シミュレーター、および対話型AI分析システム",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}
