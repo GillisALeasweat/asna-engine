@@ -1,6 +1,7 @@
 import type { EvidenceUnit, QuestionAnalysis, SubQuestion } from '../src/types/cognitive';
 import { runIndependentSpecialists } from '../src/engine/runIndependentSpecialists';
 import { createGeminiSpecialistExecutor } from './geminiSpecialist';
+import { prepareIntegrationHandoff } from '../src/engine/prepareIntegrationHandoff';
 
 /**
  * Server-side entry point. It deliberately does not expose an unauthenticated
@@ -34,5 +35,6 @@ export async function runServerSpecialists(
   );
   // No synthesis or convergence is claimed here: incomplete specialist runs
   // remain explicitly incomplete for the later integration stage.
-  return { ...output, complete: output.failures.length === 0 && output.results.length === request.assignments.length };
+  const handoff = prepareIntegrationHandoff(request.assignments.map(a => a.specialistId), output);
+  return { ...output, complete: handoff.readyForCompleteIntegration, handoff };
 }
