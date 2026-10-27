@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { PRESET_SCENARIOS } from '../src/data/presetScenarios';
 import { runIndependentSpecialists } from '../src/engine/runIndependentSpecialists';
+import type { SpecialistTask } from '../src/engine/runIndependentSpecialists';
 
 async function main() {
   const preset = structuredClone(PRESET_SCENARIOS[0]);
@@ -15,7 +16,7 @@ async function main() {
   const executors = originals.map((s, i) => ({
     specialistId: s.specialistId,
     axis: s.axis,
-    execute: async (task: Parameters<import('../src/engine/runIndependentSpecialists').SpecialistExecutor>[0]) => {
+    execute: async (task: Readonly<SpecialistTask>) => {
       observed.push(task.specialistId);
       assert.equal(task.subquestion.id, subquestions[i].id);
       // A mutation in one task must not leak into the other task or original.
