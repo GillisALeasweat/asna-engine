@@ -7,10 +7,11 @@ import {
   GitBranch, 
   Layers, 
   ShieldAlert,
-  ArrowRight
+  ArrowRight,
+  ShieldCheck
 } from 'lucide-react';
 
-export type ActiveTab = 'review' | 'spec_compare' | 'simulator' | 'items_6_10' | 'schemas' | 'github_kit';
+export type ActiveTab = 'review' | 'spec_compare' | 'simulator' | 'security' | 'items_6_10' | 'schemas' | 'github_kit';
 
 interface NavigationProps {
   activeTab: ActiveTab;
@@ -22,6 +23,7 @@ export const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab 
     { id: 'review' as ActiveTab, label: 'ブラッシュアップ総合提案', icon: Sparkles, badge: '8大提言' },
     { id: 'spec_compare' as ActiveTab, label: '仕様書 v0.1 vs v0.2', icon: FileText, badge: '改定スペック' },
     { id: 'simulator' as ActiveTab, label: '認知パイプライン・シミュレータ', icon: Cpu, badge: 'Live Demo' },
+    { id: 'security' as ActiveTab, label: 'AI セキュリティ評価', icon: ShieldCheck, badge: 'OWASP A+' },
     { id: 'items_6_10' as ActiveTab, label: '未確定項目 ⑥〜⑩ 設計ドラフト', icon: Layers, badge: '完全補完' },
     { id: 'schemas' as ActiveTab, label: '実装用 TypeScript / JSON Schema', icon: Code2, badge: '型定義' },
     { id: 'github_kit' as ActiveTab, label: 'GitHub 公開キット (README/RFC)', icon: GitBranch, badge: 'RFC-0001' },

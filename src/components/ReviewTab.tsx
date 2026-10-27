@@ -95,6 +95,13 @@ export const ReviewTab: React.FC<ReviewTabProps> = ({ onNavigateTab }) => {
               <ArrowRight className="w-4 h-4" />
             </button>
             <button
+              onClick={() => onNavigateTab('security')}
+              className="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-purple-600/30 hover:bg-purple-600/40 text-purple-200 border border-purple-500/30 text-xs sm:text-sm font-semibold transition-all cursor-pointer"
+            >
+              <ShieldCheck className="w-4 h-4 text-purple-400" />
+              <span>🛡️ AI セキュリティ &amp; 脅威耐性評価</span>
+            </button>
+            <button
               onClick={() => onNavigateTab('spec_compare')}
               className="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs sm:text-sm font-semibold transition-all cursor-pointer"
             >

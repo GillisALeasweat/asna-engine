@@ -6,8 +6,11 @@ import {
   CITATION_CFF, 
   ZENODO_JSON, 
   ACADEMIC_PEER_REVIEW_CHECKLIST,
-  EVALUATE_ECE_PY
+  EVALUATE_ECE_PY,
+  RELEASE_NOTES_MD
 } from '../data/githubKit';
+import { SPEC_V01_TEXT, SPEC_V02_TEXT } from '../data/v02SpecContent';
+import { downloadTextFile, downloadZipArchive, FileEntry } from '../utils/downloadHelper';
 import { 
   Copy, 
   Check, 
@@ -19,12 +22,18 @@ import {
   GraduationCap, 
   FileCheck2, 
   AlertTriangle,
-  BarChart2
+  BarChart2,
+  Tag,
+  Download,
+  Archive,
+  FileDown,
+  ShieldCheck
 } from 'lucide-react';
 
 export const GithubKitTab: React.FC = () => {
-  const [activeFile, setActiveFile] = useState<'readme' | 'rfc' | 'tree' | 'cff' | 'zenodo' | 'benchmark' | 'checklist'>('checklist');
+  const [activeFile, setActiveFile] = useState<'release' | 'readme' | 'rfc' | 'tree' | 'cff' | 'zenodo' | 'benchmark' | 'checklist'>('release');
   const [copied, setCopied] = useState<string | null>(null);
+  const [downloadingZip, setDownloadingZip] = useState(false);
 
   const handleCopy = (id: string, text: string) => {
     navigator.clipboard.writeText(text);
@@ -32,15 +41,79 @@ export const GithubKitTab: React.FC = () => {
     setTimeout(() => setCopied(null), 2000);
   };
 
+  const getChecklistMarkdown = () => {
+    return `# ASNA Academic Peer Review & DOI Checklist
+
+| Category | Status | Severity |
+| :--- | :--- | :--- |
+${ACADEMIC_PEER_REVIEW_CHECKLIST.map(item => `| ${item.category} | ${item.status} | ${item.severity} |`).join('\n')}
+
+---
+
+${ACADEMIC_PEER_REVIEW_CHECKLIST.map(item => `
+## ${item.category}
+- **Status**: ${item.status}
+- **Severity**: ${item.severity}
+- **Reviewer Perspective**: ${item.reviewerPerspective}
+
+### Required Items:
+${item.lackingItems.map(li => `- ${li}`).join('\n')}
+`).join('\n\n')}
+`;
+  };
+
   const getActiveContent = () => {
     switch (activeFile) {
+      case 'release': return RELEASE_NOTES_MD;
       case 'readme': return GITHUB_README_MD;
       case 'rfc': return RFC_0001_MD;
       case 'tree': return REPO_DIRECTORY_TREE;
       case 'cff': return CITATION_CFF;
       case 'zenodo': return ZENODO_JSON;
       case 'benchmark': return EVALUATE_ECE_PY;
+      case 'checklist': return getChecklistMarkdown();
       default: return '';
+    }
+  };
+
+  const getActiveFilename = () => {
+    switch (activeFile) {
+      case 'release': return 'RELEASE-v0.2.0.md';
+      case 'readme': return 'README.md';
+      case 'rfc': return '0001-asna-architecture.md';
+      case 'tree': return 'DIRECTORY_TREE.txt';
+      case 'cff': return 'CITATION.cff';
+      case 'zenodo': return '.zenodo.json';
+      case 'benchmark': return 'evaluate_ece.py';
+      case 'checklist': return 'PEER_REVIEW_CHECKLIST.md';
+      default: return 'asna-file.txt';
+    }
+  };
+
+  const handleDownloadCurrent = () => {
+    const filename = getActiveFilename();
+    const content = getActiveContent();
+    downloadTextFile(filename, content);
+  };
+
+  const handleDownloadAllZip = async () => {
+    try {
+      setDownloadingZip(true);
+      const files: FileEntry[] = [
+        { path: 'README.md', content: GITHUB_README_MD },
+        { path: 'CITATION.cff', content: CITATION_CFF },
+        { path: '.zenodo.json', content: ZENODO_JSON },
+        { path: 'RELEASE-v0.2.0.md', content: RELEASE_NOTES_MD },
+        { path: 'DIRECTORY_TREE.txt', content: REPO_DIRECTORY_TREE },
+        { path: 'rfcs/0001-asna-architecture.md', content: RFC_0001_MD },
+        { path: 'benchmarks/evaluate_ece.py', content: EVALUATE_ECE_PY },
+        { path: 'docs/ASNA-Specification-v0.2.md', content: SPEC_V02_TEXT },
+        { path: 'docs/ASNA-Specification-v0.1.md', content: SPEC_V01_TEXT },
+        { path: 'docs/PEER_REVIEW_CHECKLIST.md', content: getChecklistMarkdown() }
+      ];
+      await downloadZipArchive(files, 'asna-project-suite-v0.2.0.zip');
+    } finally {
+      setDownloadingZip(false);
     }
   };
 
@@ -50,9 +123,15 @@ export const GithubKitTab: React.FC = () => {
       <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-mono mb-2 border border-emerald-500/20">
-              <GraduationCap className="w-3.5 h-3.5" />
-              <span>Zenodo DOI &amp; Academic Publishing Suite</span>
+            <div className="flex flex-wrap items-center gap-2 mb-2">
+              <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-mono border border-emerald-500/20">
+                <GraduationCap className="w-3.5 h-3.5" />
+                <span>Zenodo DOI &amp; Academic Publishing Suite</span>
+              </div>
+              <div className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-purple-500/10 text-purple-400 text-xs font-mono border border-purple-500/20">
+                <ShieldCheck className="w-3.5 h-3.5" />
+                <span>🛡️ AI Security (T1–T4 Threat Hardened)</span>
+              </div>
             </div>
             <h2 className="text-xl sm:text-2xl font-bold text-white">
               GitHub 公開 &amp; Zenodo DOI 査読準備キット
@@ -62,21 +141,53 @@ export const GithubKitTab: React.FC = () => {
             </p>
           </div>
 
-          <div className="flex items-center space-x-2">
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Download Current File */}
+            <button
+              onClick={handleDownloadCurrent}
+              title={`${getActiveFilename()} をダウンロード`}
+              className="flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white text-xs font-semibold border border-slate-700 shadow-sm transition-all cursor-pointer"
+            >
+              <FileDown className="w-4 h-4 text-indigo-400" />
+              <span>{getActiveFilename()} を保存</span>
+            </button>
+
+            {/* Copy Button */}
             {activeFile !== 'checklist' && (
               <button
                 onClick={() => handleCopy(activeFile, getActiveContent())}
-                className="flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-lg shadow-indigo-600/30 transition-all cursor-pointer"
+                className="flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-lg shadow-indigo-600/30 transition-all cursor-pointer"
               >
                 {copied === activeFile ? <Check className="w-4 h-4 text-emerald-300" /> : <Copy className="w-4 h-4" />}
-                <span>{copied === activeFile ? 'コピー完了！' : '現在のファイルをコピー'}</span>
+                <span>{copied === activeFile ? 'コピー完了！' : 'テキストをコピー'}</span>
               </button>
             )}
+
+            {/* Download ALL as ZIP */}
+            <button
+              onClick={handleDownloadAllZip}
+              disabled={downloadingZip}
+              className="flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-lg shadow-emerald-600/30 transition-all cursor-pointer disabled:opacity-50"
+            >
+              <Archive className="w-4 h-4" />
+              <span>{downloadingZip ? 'ZIP生成中...' : '📦 全ファイルをZIP一括ダウンロード'}</span>
+            </button>
           </div>
         </div>
 
         {/* File Selectors */}
         <div className="flex flex-wrap gap-2 mt-5">
+          <button
+            onClick={() => setActiveFile('release')}
+            className={`flex items-center space-x-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+              activeFile === 'release'
+                ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/30'
+                : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
+            }`}
+          >
+            <Tag className="w-3.5 h-3.5" />
+            <span>🚀 Release v0.2.0 (GitHub/Zenodo用)</span>
+          </button>
           <button
             onClick={() => setActiveFile('checklist')}
             className={`flex items-center space-x-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
@@ -208,6 +319,7 @@ export const GithubKitTab: React.FC = () => {
         <div className="rounded-2xl bg-slate-900 border border-slate-800 overflow-hidden shadow-2xl">
           <div className="px-5 py-3.5 bg-slate-950/80 border-b border-slate-800 flex items-center justify-between">
             <span className="font-mono text-xs text-indigo-400 font-bold">
+              {activeFile === 'release' && 'GitHub Releases: v0.2.0 (Zenodo DOI Trigger)'}
               {activeFile === 'readme' && 'README.md'}
               {activeFile === 'rfc' && 'rfcs/0001-asna-architecture.md'}
               {activeFile === 'tree' && 'Directory Structure (Monorepo)'}
@@ -215,7 +327,16 @@ export const GithubKitTab: React.FC = () => {
               {activeFile === 'zenodo' && '.zenodo.json (Place in Repository Root)'}
               {activeFile === 'benchmark' && 'benchmarks/evaluate_ece.py (Python Evaluation Benchmark)'}
             </span>
-            <span className="text-[10px] text-slate-500 font-mono">Ready to commit</span>
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={handleDownloadCurrent}
+                className="flex items-center space-x-1 px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-mono transition-all cursor-pointer"
+              >
+                <Download className="w-3.5 h-3.5 text-indigo-400" />
+                <span>保存 ({getActiveFilename()})</span>
+              </button>
+              <span className="text-[10px] text-slate-500 font-mono">Ready to commit</span>
+            </div>
           </div>
           <pre className="p-6 font-mono text-xs sm:text-sm text-slate-200 whitespace-pre-wrap leading-relaxed overflow-x-auto max-h-[600px]">
             {getActiveContent()}

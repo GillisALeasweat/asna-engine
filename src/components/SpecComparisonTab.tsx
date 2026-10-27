@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { SPEC_V01_TEXT, SPEC_V02_TEXT } from '../data/v02SpecContent';
-import { Copy, Check, Split, FileText, ArrowRight, Download } from 'lucide-react';
+import { downloadTextFile } from '../utils/downloadHelper';
+import { Copy, Check, Split, FileText, ArrowRight, Download, FileDown } from 'lucide-react';
 
 export const SpecComparisonTab: React.FC = () => {
   const [viewMode, setViewMode] = useState<'v02' | 'split' | 'v01'>('v02');
@@ -10,6 +11,14 @@ export const SpecComparisonTab: React.FC = () => {
     navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleDownload = (version: 'v01' | 'v02') => {
+    if (version === 'v02') {
+      downloadTextFile('ASNA-Specification-v0.2.md', SPEC_V02_TEXT);
+    } else {
+      downloadTextFile('ASNA-Specification-v0.1.md', SPEC_V01_TEXT);
+    }
   };
 
   const majorChangesSummary = [
@@ -47,13 +56,27 @@ export const SpecComparisonTab: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex items-center space-x-2 shrink-0">
+        <div className="flex flex-wrap items-center gap-2 shrink-0">
+          <button
+            onClick={() => handleDownload('v02')}
+            className="flex items-center space-x-1.5 px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white text-xs font-semibold border border-slate-700 transition-all cursor-pointer shadow-sm"
+          >
+            <FileDown className="w-4 h-4 text-indigo-400" />
+            <span>v0.2 を保存 (.md)</span>
+          </button>
+          <button
+            onClick={() => handleDownload('v01')}
+            className="flex items-center space-x-1.5 px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white text-xs font-semibold border border-slate-700 transition-all cursor-pointer shadow-sm"
+          >
+            <FileDown className="w-4 h-4 text-slate-400" />
+            <span>v0.1 を保存 (.md)</span>
+          </button>
           <button
             onClick={() => handleCopy(SPEC_V02_TEXT)}
             className="flex items-center space-x-1.5 px-3.5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-lg shadow-indigo-600/30 transition-all cursor-pointer"
           >
             {copied ? <Check className="w-4 h-4 text-emerald-300" /> : <Copy className="w-4 h-4" />}
-            <span>{copied ? 'Markdownコピー完了！' : 'v0.2 をMarkdownコピー'}</span>
+            <span>{copied ? 'コピー完了！' : 'v0.2 をコピー'}</span>
           </button>
         </div>
       </div>

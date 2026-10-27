@@ -6,6 +6,7 @@ import { SimulatorTab } from './components/SimulatorTab';
 import { UndeterminedItemsTab } from './components/UndeterminedItemsTab';
 import { SchemaTab } from './components/SchemaTab';
 import { GithubKitTab } from './components/GithubKitTab';
+import { SecurityTab } from './components/SecurityTab';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<ActiveTab>('review');
@@ -25,6 +26,9 @@ export default function App() {
         )}
         {activeTab === 'simulator' && (
           <SimulatorTab />
+        )}
+        {activeTab === 'security' && (
+          <SecurityTab />
         )}
         {activeTab === 'items_6_10' && (
           <UndeterminedItemsTab />

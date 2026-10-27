@@ -1,0 +1,6 @@
+{
+  "name": "ASNA Spec Review & Interactive Studio",
+  "description": "適応型・自己否定型マルチエージェントAI認知アーキテクチャ設計仕様書(v0.1)のブラッシュアップ提案・v0.2仕様・実行シミュレータ",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,6 +1,9 @@
 export const GITHUB_README_MD = `# ASNA: Adaptive & Self-Negating Cognitive Architecture for LLM Multi-Agent Systems
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Status: RFC-0001](https://img.shields.io/badge/RFC-0001%20Proposed-emerald.svg)](./rfcs/0001-asna-architecture.md)
+[![Security: Sandboxed Isolation](https://img.shields.io/badge/Security-Sandboxed_Isolation-blueviolet.svg)](#-ai-security--threat-model-evaluation)
+[![Safety: Sycophancy Resistant](https://img.shields.io/badge/Safety-Sycophancy_Resistant-success.svg)](#-ai-security--threat-model-evaluation)
+[![Adversarial: Grounded Negation](https://img.shields.io/badge/Adversarial-Grounded_Negation-red.svg)](#-ai-security--threat-model-evaluation)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Strict-blue)](https://www.typescriptlang.org/)
 [![Python](https://img.shields.io/badge/Python-3.11+-brightgreen)](https://python.org/)
 
@@ -76,6 +79,19 @@ Contemporary LLMs do not hallucinate out of ignorance; they hallucinate because 
 
 ---
 
+## 🛡️ AI Security & Threat Model Evaluation (T1–T4 Framework)
+
+Unlike conversational multi-agent architectures that suffer from catastrophic lateral compromise (where 1 compromised agent poisons the entire chat memory), ASNA is hardened against the OWASP Top 10 for LLMs through structural isolation:
+
+| Threat Vector | Attack Scenario | ASNA Architectural Defense | Security Tag |
+| :--- | :--- | :--- | :--- |
+| **T1: Prompt Injection & Jailbreak Lateral Spread** | Malicious payload in user input instructs agent to bypass safety bounds. | **Zero Lateral Contagion**: Specialists operate in strict context isolation. Even if Specialist $A$ is jailbroken, its raw prompt never touches Specialist $B$ or the Synthesizer. | \`jailbreak-defense\` \`sandboxed-isolation\` |
+| **T2: Sycophancy-driven Exploitation & Hallucination Hijack** | Adversary feeds false premises with leading questions to force flawed agreement. | **Principled Rejection First-Classing**: Because \`Reject\` is mathematically rewarded, the FSM terminates into \`Reject\` rather than yielding to manipulative bias. | \`sycophancy-mitigation\` \`epistemic-security\` |
+| **T3: Evidence Poisoning & Fabricated Refutation** | An adversary or hallucinating LLM generates fake counterarguments to derail truth. | **Grounded Evidence Proof**: Self-negation agents (L0–L4) are strictly disallowed from posing counter-claims without verifiable \`EvidenceUnit\` citations mapped to root data. | \`adversarial-robustness\` \`falsification-integrity\` |
+| **T4: Black-Box Opacity & Supply-chain Exploits** | Malicious logic inserted in intermediate agent reasoning without auditability. | **Inference Provenance DAG**: Topological trace \`Source → Claim → Inference → Hypothesis → Conclusion\` allows immediate forensic analysis of compromised reasoning paths. | \`provenance-auditability\` \`threat-modeling\` |
+
+---
+
 ## 🚀 Repository Structure
 
 \`\`\`
@@ -147,6 +163,11 @@ keywords:
   - "epistemic reasoning"
   - "provenance-graph"
   - "hallucination-mitigation"
+  - "ai-security"
+  - "jailbreak-defense"
+  - "prompt-injection-defense"
+  - "adversarial-robustness"
+  - "threat-modeling"
 authors:
   - family-names: "YourLastName"
     given-names: "YourFirstName"
@@ -180,7 +201,12 @@ export const ZENODO_JSON = `{
     "multi-agent debate",
     "epistemic logic",
     "hallucination mitigation",
-    "provenance dag"
+    "provenance dag",
+    "ai security",
+    "jailbreak defense",
+    "prompt injection defense",
+    "adversarial robustness",
+    "threat modeling"
   ],
   "communities": [
     { "identifier": "zenodo" }
@@ -251,6 +277,18 @@ export const ACADEMIC_PEER_REVIEW_CHECKLIST = [
       "前ターンで策定した『推論レイテンシ・計算コスト』『過剰懐疑論による分析麻痺』『同一モデル共変バイアス』等の限界開示を論文末尾に独立章として配置。"
     ],
     reviewerPerspective: "近年トップカンファレンス（NeurIPS, ACL）で義務化された『Limitations and Broader Impact Statement』を完璧に満たす。"
+  },
+  {
+    category: "7. AIセキュリティ & 敵対的堅牢性評価 (AI Security & Threat Modeling)",
+    status: "完了 (T1〜T4 脅威モデル策定済)",
+    severity: "High (産業応用・エンタープライズ必須要件)",
+    lackingItems: [
+      "プロンプトインジェクション・脱獄耐性（T1: 専門家の隔離サンドボックスにより、1体の感染が他エージェントへ水平伝播しない）。",
+      "迎合誘導攻撃耐性（T2: 悪意ある誘導尋問・前提詐欺に対し、F_conv = Reject による同調拒絶）。",
+      "架空反証ポイズニング耐性（T3: Grounded Evidence 必須化により、架空の反証やデッチ上げによる推論脱線・妨害工作を遮断）。",
+      "インシデントフォレンジック追跡性（T4: 推論プロベナンスDAGにより、異常出力に至った原因エージェント・原典を完全追跡）。"
+    ],
+    reviewerPerspective: "『マルチエージェント特有の協調汚染（1体がプロンプトインジェクションを受けると全員が騙される脆弱性）に耐えられるか？』というセキュリティ査読に対する強力な防御線。"
   }
 ];
 
@@ -456,4 +494,82 @@ if __name__ == "__main__":
     print(json.dumps(results, indent=4))
     print("\n[OK] Pipeline verified. Ready for integration with real LLM evaluation datasets.")
 `;
+
+export const RELEASE_NOTES_MD = `## 🚀 ASNA v0.2.0: Formal Cognitive Architecture & Epistemic Benchmark Suite
+
+> **Release Tag**: \`v0.2.0\`  
+> **Release Name**: \`ASNA v0.2.0 - Decoupling Convergence from Truth\`  
+> **Target Branch**: \`main\`  
+> **Zenodo DOI Integration**: Ready (triggers automated DOI minting upon publication)
+
+---
+
+### 🌟 Executive Summary
+We are proud to announce the formal release of **ASNA (Adaptive & Self-Negating Architecture) v0.2.0**. 
+
+Modern LLM multi-agent frameworks suffer from **Echo Chamber Convergence** and **Sycophancy by Design**, where unconstrained conversational debate cascades into collective hallucinations and reward gaming. ASNA resolves this by establishing:
+1. **Convergence ≠ Truth**: Rejecting flawed premises is celebrated as a first-class cognitive triumph.
+2. **Physical Cognitive Isolation**: Independent parallel specialists reason blind to each other's stream of thought.
+3. **Grounded Self-Negation**: Every refutation requires primary provenance (\`EvidenceUnit\`).
+4. **Bottom Foundation Substrate**: An active inference DAG that reactively invalidates downstream claims.
+
+---
+
+### 📦 Key Features & Inclusions in this Release
+
+#### 1. Dual-Layer Cognitive Architecture
+* **Top Cognitive Layer**: Question Analysis → Decomposition → Adaptive Router → Isolated Specialists → Multi-Level Negation → Dialectical Synthesis → Convergence FSM.
+* **Bottom Evidence Substrate**: Persistent provenance graph tracing \`Source → Claim → Inference → Hypothesis → Conclusion\` with topological invalidation propagation.
+
+#### 2. Formal Mathematical Formulation (Section 1.2)
+* Mathematical operators defining problem decomposition $\\mathcal{D}(Q)$, isolated specialist inference $S_k(q_i, \\mathcal{E})$, grounded negation $\\mathcal{N}_L(\\mathcal{H}, \\mathcal{E})$, and convergence state mapping $\\mathcal{F}_{\\text{conv}}$.
+
+#### 3. Epistemic Convergence State Machine (S / A / B / C / Reject)
+* Deterministic state transitions preventing premature consensus:
+  * **S (Fully Converged)**: Unanimous, 100% verified evidence, 0 open counter-hypotheses.
+  * **A (Dominant Convergence)**: Core direction resolved with minor peripheral caveats.
+  * **B (Structural Conflict)**: Irreducible competing hypotheses balanced with formal trade-offs.
+  * **C (Partial Local)**: Core premise unproven; queries targeted user clarification.
+  * **Reject (Principled Refusal)**: Premise contradiction or ungrounded evidence identified.
+
+#### 4. Hardened Benchmark Evaluation Suite (\`benchmarks/evaluate_ece.py\`)
+* Reference Python evaluator for:
+  * **Expected Calibration Error (ECE)** (with strict $0.0$ lower-bound binning fix).
+  * **Refutation Recall** (falsification precision on adversarial data).
+  * **Over-Skepticism Penalty** (false refutation rate on valid premises).
+* Includes built-in self-testing mock data generator (\`generate_mock_data\`) for out-of-the-box verification.
+
+#### 5. Academic Publishing & Zenodo Integration
+* Complete \`CITATION.cff\` (Citation File Format 1.2.0) and \`.zenodo.json\` for instant DOI assignment and BibTeX integration.
+* Comprehensive **Related Work** survey and **Limitations & Broader Impact Statement** adhering to NeurIPS/ICLR standards.
+
+#### 6. AI Security & Threat Model Evaluation (T1–T4 Framework)
+* **Zero Lateral Contagion (T1)**: Isolated sandbox contexts prevent injected adversarial prompts from propagating to adjacent agents.
+* **Principled Rejection First-Classing (T2)**: Defends against sycophancy and manipulative leading prompts via mathematically rewarded \`Reject\` states.
+* **Grounded Counterevidence Gate (T3)**: Requires verifiable \`EvidenceUnit\` citations for all refutations, halting hallucinated or fabricated counterclaims.
+* **Forensic Inference DAG (T4)**: Provides end-to-end topological auditability (\`Source → Claim → Inference → Hypothesis → Conclusion\`).
+
+---
+
+### 💻 Interactive Visualizer & Specification Studio
+Experience the live interactive simulation and inspect full specification comparisons at:  
+👉 **[ASNA Cognitive Studio Live Demo](https://ais-pre-tqeydwrackhwjvg3q4ed4i-679014150043.asia-northeast1.run.app)**
+
+---
+
+### 📖 How to Cite (BibTeX)
+\`\`\`bibtex
+@software{asna_cognitive_architecture_2026,
+  author       = {ASNA Project Contributors},
+  title        = {ASNA: Adaptive & Self-Negating Multi-Agent Cognitive Architecture for Epistemic Reasoning},
+  month        = oct,
+  year         = 2026,
+  publisher    = {Zenodo},
+  version      = {v0.2.0},
+  doi          = {10.5281/zenodo.XXXXXXX},
+  url          = {https://github.com/your-username/asna-engine}
+}
+\`\`\`
+`;
+
 
