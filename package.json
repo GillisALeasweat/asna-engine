@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit",
-    "test:engine": "tsx tests/validateEngineInput.test.ts && tsx tests/runIndependentSpecialists.test.ts"
+    "test:engine": "tsx tests/validateEngineInput.test.ts && tsx tests/runIndependentSpecialists.test.ts && tsx tests/geminiSpecialist.test.ts"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",
