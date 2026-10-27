@@ -1,0 +1,23 @@
+{
+  "title": "ASNA: Adaptive & Self-Negating Cognitive Architecture for LLM Multi-Agent Systems",
+  "description": "A formal cognitive architecture specification and reference engine designed to eliminate reward gaming, sycophancy, and ungrounded hallucinations through isolated parallel specialists, multi-level grounded self-negation, and an Inference Provenance DAG.",
+  "creators": [
+    {
+      "name": "YourLastName, YourFirstName",
+      "affiliation": "Independent Researcher / ASNA Project"
+    }
+  ],
+  "access_right": "open",
+  "license": "Apache-2.0",
+  "upload_type": "software",
+  "keywords": [
+    "artificial-intelligence",
+    "multi-agent-debate",
+    "epistemic-logic",
+    "hallucination-mitigation",
+    "provenance-dag"
+  ],
+  "communities": [
+    { "identifier": "zenodo" }
+  ]
+}
