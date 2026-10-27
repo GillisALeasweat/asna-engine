@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+message: "If you use this cognitive architecture specification or reference engine, please cite it as below."
+title: "ASNA: Adaptive & Self-Negating Multi-Agent Cognitive Architecture for Epistemic Reasoning"
+version: 0.2.0
+date-released: 2026-10-01
+license: "Apache-2.0"
+repository-code: "https://github.com"
+url: "https://github.com"
+keywords:
+  - "multi-agent-systems"
+  - "cognitive-architecture"
+  - "self-negation"
+  - "falsifiability"
+  - "expected-calibration-error"
+  - "provenance-dag"
+authors:
+  - family-names: "YourLastName"
+    given-names: "YourFirstName"
+    affiliation: "Independent Researcher"
+preferred-citation:
+  type: article
+  authors:
+    - family-names: "YourLastName"
+      given-names: "YourFirstName"
+  title: "Decoupling Convergence from Truth: An Adaptive and Self-Negating Multi-Agent Architecture with Epistemic Provenance"
+  journal: "arXiv preprint arXiv:2610.XXXXX"
+  year: 2026
