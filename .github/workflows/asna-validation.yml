@@ -1,0 +1,25 @@
+name: ASNA validation
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      # Repository currently has no package-lock.json; use install until lockfile is committed.
+      - run: npm install --no-package-lock
+      - run: npm run lint
+      - run: npm run test:engine
+      - run: npm run build

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PRESET_SCENARIOS } from '../data/presetScenarios';
+import { validatePresetScenario } from '../engine/validateEngineInput';
 import { PresetScenario, EvidenceUnit, SpecialistResult } from '../types/cognitive';
 import { 
   Play, 
@@ -27,6 +28,7 @@ export const SimulatorTab: React.FC = () => {
   const [selectedNodeData, setSelectedNodeData] = useState<any>(null);
 
   const scenario = PRESET_SCENARIOS.find(s => s.id === selectedScenarioId) || PRESET_SCENARIOS[0];
+  const validation = validatePresetScenario(scenario);
 
   const pipelineStages = [
     { id: 0, title: '01. Question Analysis', subtitle: '何を答えるべきか・前提・曖昧性の抽出', icon: Search },
@@ -72,6 +74,11 @@ export const SimulatorTab: React.FC = () => {
 
   return (
     <div className="space-y-6 max-w-6xl mx-auto py-6">
+      <section className="p-4 rounded-xl bg-slate-900 border border-slate-700 text-sm text-slate-200" aria-label="Preset data validation">
+        <div className="font-semibold">プリセットデータ整合性チェック：{validation.accepted ? '参照チェック通過' : '参照エラーあり'}</div>
+        <p className="text-xs text-slate-400 mt-1">これは事前定義データの検証と表示です。LLMによるライブ推論、原典の真正性検証、実測セキュリティ試験ではありません。</p>
+        <ul className="mt-2 space-y-1 text-xs">{validation.findings.map((finding, index) => <li key={index} className={finding.severity === 'error' ? 'text-red-300' : 'text-amber-200'}>{finding.severity.toUpperCase()} / {finding.code}: {finding.message}</li>)}</ul>
+      </section>
       {/* Scenario Selector & Controls */}
       <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 shadow-xl">
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
